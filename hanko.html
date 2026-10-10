@@ -1,313 +1,1316 @@
 <!doctype html>
 <html lang="es">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hanko</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
-<style>
-[hidden]{display:none!important}
-/* Layout: viñetas de manga con borde grueso y sombra sólida sobre papel con trama */
-:root{--bg:#ecebe6;--surface:#fbfbf8;--fg:#141414;--muted:#55554f;--line:#141414;--accent:#c81f27;--accent2:#1f4fd1;--on-accent:#fff;--star:#c81f27;--star-off:#cfcec7;--danger:#c81f27;--chip:#141414;--chip-fg:#fbfbf8;--field:#fff;--scrim:rgba(20,20,20,.55);--dot:rgba(20,20,20,.09);
---fd:'Dela Gothic One','Hiragino Sans',sans-serif;--fb:'Zen Kaku Gothic New',system-ui,sans-serif;--fm:'Dela Gothic One',sans-serif;--fcover:'Dela Gothic One',serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141416;--surface:#1f1f22;--fg:#efeee8;--muted:#a6a59e;--line:#efeee8;--accent:#ff4b52;--accent2:#86a8ff;--on-accent:#141416;--star:#ff4b52;--star-off:#45454a;--danger:#ff4b52;--chip:#efeee8;--chip-fg:#141416;--field:#141416;--scrim:rgba(0,0,0,.7);--dot:rgba(255,255,255,.05);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141416;--surface:#1f1f22;--fg:#efeee8;--muted:#a6a59e;--line:#efeee8;--accent:#ff4b52;--accent2:#86a8ff;--on-accent:#141416;--star:#ff4b52;--star-off:#45454a;--danger:#ff4b52;--chip:#efeee8;--chip-fg:#141416;--field:#141416;--scrim:rgba(0,0,0,.7);--dot:rgba(255,255,255,.05);color-scheme:dark}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--fb);font-size:15px;line-height:1.55;margin:0}
-body.lock{overflow:hidden}
-.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
-.top{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;padding-block:20px}
-.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
-.brand h1{font-family:var(--fd);margin:0;font-size:1.8rem;line-height:1}
-.tagline{margin:4px 0 0;color:var(--muted);font-size:.85rem}
-nav{display:flex;flex-wrap:wrap;gap:4px 16px}
-nav a{color:var(--fg);text-decoration:none;font-size:.9rem}
-nav a:hover{color:var(--accent)}
-button{font:inherit;cursor:pointer;color:inherit}
-button:disabled{opacity:.35;cursor:default}
-.btn{background:var(--accent);color:var(--on-accent);border:0;padding:10px 18px;font-weight:700}
-.x{background:transparent;border:1px solid var(--line);padding:4px 10px;font-size:.78rem;color:var(--muted)}
-.x:hover:not(:disabled){color:var(--danger);border-color:var(--danger)}
-.x.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
-:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
-.role{border:1px solid var(--line);background:var(--surface);padding:8px 14px;font-weight:700;font-size:.85rem}
-body.admin .role{background:var(--danger);color:#fff;border-color:var(--danger)}
-section{margin-block:44px}
-.sec{font-family:var(--fd);font-size:1.5rem;margin:0 0 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;text-wrap:balance;line-height:1.2}
-.cover{aspect-ratio:3/4;display:grid;place-items:center;background:linear-gradient(160deg,hsl(var(--h) 62% 56%),hsl(calc(var(--h) + 45) 55% 28%));color:#fff;font-family:var(--fcover);flex:none;max-width:100%;position:relative;overflow:hidden}
-.cover span{font-size:2.2rem;line-height:1;position:relative;z-index:1}
-.cover.sm{width:56px}.cover.sm span{font-size:1.5rem}
-.cover.big{width:min(220px,100%)}.cover.big span{font-size:5rem}
-.day{display:grid;grid-template-columns:auto 1fr;gap:24px;cursor:pointer;padding:20px}
-.day-body{min-width:0}
-@media(max-width:600px){.day{grid-template-columns:1fr}.day .cover.big{width:150px}.day .cover.big span{font-size:3.6rem}}
-.day h3{font-family:var(--fd);font-size:2.1rem;margin:4px 0;line-height:1.1;text-wrap:balance}
-.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--accent);margin:0;font-weight:700}
-.meta{color:var(--muted);font-size:.82rem;margin:2px 0 6px}
-.excerpt{max-width:64ch;margin:8px 0}
-.rate{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.stars{display:inline-flex;gap:1px;letter-spacing:0}
-.st{color:var(--star-off)}.st.on{color:var(--star)}
-.score{font-family:var(--fm);font-variant-numeric:tabular-nums;font-size:1.05rem}
-.comm{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);flex-wrap:wrap;margin-top:4px}
-.comm .stars{font-size:.8rem}
-.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
-.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:40px 32px;margin-block:44px}
-.duo section{margin-block:0}
-ol.rank{list-style:none;padding:0;margin:0;display:grid;gap:10px}
-.row{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:14px;align-items:start;cursor:pointer;padding:12px}
-@media(max-width:560px){.row{grid-template-columns:auto auto minmax(0,1fr)}.row .adm{grid-column:1/-1}}
-.rb h4{margin:0;font-size:1.05rem;line-height:1.25}
-.rk{font-family:var(--fd);font-size:1.6rem;min-width:1.4em;font-variant-numeric:tabular-nums;line-height:1}
-.adm{display:flex;gap:6px;flex-wrap:wrap}
-.hist .cover.sm{width:76px}.hist .cover.sm span{font-size:2rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px}
-.card{cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0;padding:10px}
-.card .cover{width:100%}
-.card h4{margin:2px 0 0;font-size:.95rem;line-height:1.25}
-.empty{color:var(--muted);font-style:italic;padding:12px;list-style:none}
-.panel{padding:20px;margin-block:4px 8px;background:var(--surface);border:2px solid var(--danger)}
-.panel h2{font-family:var(--fd);margin:0 0 4px;font-size:1.3rem}
-.panel .note{margin:0 0 16px;color:var(--muted);font-size:.85rem}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px}
-.pgrid .wide{grid-column:1/-1}
-label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
-input,textarea,select{font:inherit;color:var(--fg);background:var(--field);border:1px solid var(--line);padding:8px 10px;width:100%}
-.checks{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
-.checks label{display:flex;align-items:center;gap:6px;color:var(--fg);font-size:.9rem}
-.checks input[type=checkbox]{width:auto}
-.checks input[type=number]{width:72px}
-#overlay{position:fixed;inset:0;background:var(--scrim);display:grid;place-items:center;padding:16px;z-index:20}
-.sheet{background:var(--surface);color:var(--fg);width:min(780px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:24px;position:relative}
-.close{position:absolute;top:10px;right:12px;background:none;border:0;font-size:1.3rem;color:var(--muted)}
-.d-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px}
-.d-head .cover.big{width:150px}.d-head .cover.big span{font-size:3.8rem}
-@media(max-width:520px){.d-head{grid-template-columns:1fr}.d-head .cover.big{width:110px}}
-.d-head h3{font-family:var(--fd);font-size:1.8rem;margin:8px 0 2px;line-height:1.1;text-wrap:balance;padding-right:28px}
-.tags{display:flex;gap:6px;flex-wrap:wrap}
-.tag{font-size:.7rem;padding:3px 8px;background:var(--chip);color:var(--chip-fg);font-weight:700;letter-spacing:.04em}
-.by{font-size:.75rem;color:var(--muted)}
-.d-review{margin-block:22px}
-.d-review p:last-child{margin:6px 0 0;max-width:66ch}
-.admbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px;border:1px dashed var(--danger);margin-bottom:22px}
-.admbar>span{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--danger);font-weight:700;width:100%}
-.x.in{color:var(--fg);border-color:var(--fg)}
-.c-title{font-family:var(--fd);font-size:1.25rem;margin:0 0 12px}
-.cform{display:grid;gap:10px;margin-bottom:22px}
-.pick{border:0;padding:0;margin:0;display:flex;gap:2px;align-items:center;flex-wrap:wrap}
-.pick legend{font-size:.8rem;color:var(--muted);margin-bottom:4px;padding:0}
-.pick label{display:block;position:relative}
-.pick input{position:absolute;opacity:0;width:1px;height:1px}
-.pick span{font-size:1.7rem;color:var(--star-off);cursor:pointer;line-height:1;padding:0 2px}
-.pick label.on span{color:var(--star)}
-.pick input:focus-visible+span{outline:2px solid var(--accent2)}
-.pick .clear{font-size:.75rem;margin-left:8px}
-.clist{list-style:none;padding:0;margin:0;display:grid;gap:12px}
-.clist>li{padding:12px 14px;background:var(--bg)}
-.c-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.88rem}
-.c-top time{color:var(--muted);margin-left:auto;font-size:.75rem}
-.clist p{margin:6px 0 0;overflow-wrap:anywhere}
-.nostar{font-size:.72rem;color:var(--muted)}
-.c-adm{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;z-index:30;font-size:.9rem;max-width:calc(100% - 32px)}
-footer{border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.home{font-weight:700;opacity:.85}
-/* ---- tema ---- */
-body{background-image:radial-gradient(var(--dot) 1.1px,transparent 1.4px);background-size:6px 6px}
-.logo{display:grid;place-items:center;width:52px;height:52px;background:var(--accent);color:#fff;font-family:var(--fd);font-size:1.7rem;transform:rotate(-6deg);border-radius:6px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}
-.brand h1{font-size:2.3rem;letter-spacing:.02em}
-nav a{font-weight:700;border-bottom:2px solid transparent}nav a:hover{border-color:var(--accent);color:var(--fg)}
-.role{border:2px solid var(--line);box-shadow:3px 3px 0 var(--line)}
-.sec{font-size:1.7rem;border-bottom:3px solid var(--line);padding-bottom:8px}
-.jp{background:var(--fg);color:var(--bg);padding:2px 8px;font-size:1rem}
-.day,.row,.card,.sheet,.panel{background:var(--surface);border:3px solid var(--line);box-shadow:6px 6px 0 var(--line)}
-.panel{border-color:var(--danger);box-shadow:6px 6px 0 var(--danger)}
-.day{transform:rotate(-.4deg);padding:24px}
-.day .cover{border:3px solid var(--line)}
-.day h3{font-size:2.5rem}
-.row{transition:transform .15s}.row:hover,.card:hover{transform:translate(-2px,-2px)}
-.card{transition:transform .15s}
-.rk{color:var(--accent);font-size:2rem}
-.r1 .rk{background:var(--accent);color:#fff;padding:4px 8px;border-radius:50%;font-size:1.4rem;min-width:auto;transform:rotate(-8deg)}
-.cover{border:2px solid var(--line)}
-.cover::after{content:"";position:absolute;inset:0;background:radial-gradient(rgba(0,0,0,.28) 1px,transparent 1.5px);background-size:5px 5px;mix-blend-mode:multiply}
-.score{color:var(--accent);font-family:var(--fd)}
-@media(min-width:620px){.grid .card:nth-child(7n+1){grid-column:span 2;flex-direction:row;align-items:flex-start}.grid .card:nth-child(7n+1) .cover{width:45%}}
-.btn{border:3px solid var(--line);box-shadow:3px 3px 0 var(--line);transition:transform .1s}.btn:active{transform:translate(3px,3px);box-shadow:none}
-.x{border-width:2px;color:var(--fg);font-weight:700}
-.tag{transform:rotate(-2deg)}
-.clist>li{background:var(--bg);border:2px solid var(--line);border-radius:18px;position:relative;margin-left:10px}
-.clist>li::before{content:"";position:absolute;left:-11px;top:14px;border:9px solid transparent;border-right-color:var(--line);border-left:0}
-.clist>li.empty{border:0;margin:0}.clist>li.empty::before{display:none}
-input,textarea,select{border-width:2px}
-footer{border-top-width:3px;border-color:var(--line)}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hanko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+  <style>
+    /* Ocultar elementos globalmente */
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Variables globales: Layout manga con borde grueso y sombra sólida */
+    :root {
+      --bg: #ecebe6;
+      --surface: #fbfbf8;
+      --fg: #141414;
+      --muted: #55554f;
+      --line: #141414;
+      --accent: #c81f27;
+      --accent2: #1f4fd1;
+      --on-accent: #fff;
+      --star: #c81f27;
+      --star-off: #cfcec7;
+      --danger: #c81f27;
+      --chip: #141414;
+      --chip-fg: #fbfbf8;
+      --field: #fff;
+      --scrim: rgba(20, 20, 20, 0.55);
+      --dot: rgba(20, 20, 20, 0.09);
+      --fd: 'Dela Gothic One', 'Hiragino Sans', sans-serif;
+      --fb: 'Zen Kaku Gothic New', system-ui, sans-serif;
+      --fm: 'Dela Gothic One', sans-serif;
+      --fcover: 'Dela Gothic One', serif;
+    }
+
+    /* Tema Oscuro Automático */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #141416;
+        --surface: #1f1f22;
+        --fg: #efeee8;
+        --muted: #a6a59e;
+        --line: #efeee8;
+        --accent: #ff4b52;
+        --accent2: #86a8ff;
+        --on-accent: #141416;
+        --star: #ff4b52;
+        --star-off: #45454a;
+        --danger: #ff4b52;
+        --chip: #efeee8;
+        --chip-fg: #141416;
+        --field: #141416;
+        --scrim: rgba(0, 0, 0, 0.7);
+        --dot: rgba(255, 255, 255, 0.05);
+        color-scheme: dark;
+      }
+    }
+
+    /* Reset y Estilos Base */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--fb);
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0;
+      background-image: radial-gradient(var(--dot) 1.1px, transparent 1.4px);
+      background-size: 6px 6px;
+    }
+
+    body.lock {
+      overflow: hidden;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-inline: 16px;
+      padding-block: 0 48px;
+    }
+
+    /* Tipografía y Encabezados */
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px 24px;
+      padding-block: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-right: auto;
+    }
+
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--fd);
+      font-size: 1.7rem;
+      transform: rotate(-6deg);
+      border-radius: 6px;
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .35);
+    }
+
+    .brand h1 {
+      font-family: var(--fd);
+      margin: 0;
+      font-size: 2.3rem;
+      line-height: 1;
+      letter-spacing: .02em;
+    }
+
+    .tagline {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    /* Navegación y Botones */
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+    }
+
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 700;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .home {
+      font-weight: 700;
+      opacity: .85;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      color: inherit;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: var(--on-accent);
+      border: 3px solid var(--line);
+      padding: 10px 18px;
+      font-weight: 700;
+      box-shadow: 3px 3px 0 var(--line);
+    }
+
+    .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+
+    .x {
+      background: transparent;
+      border: 2px solid var(--line);
+      padding: 4px 10px;
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .x:hover:not(:disabled) {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .x.armed {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent2);
+      outline-offset: 2px;
+    }
+
+    .role {
+      border: 2px solid var(--line);
+      background: var(--surface);
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: .85rem;
+      box-shadow: 3px 3px 0 var(--line);
+    }
+
+    body.admin .role {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    /* Secciones y Tarjetas */
+    section {
+      margin-block: 44px;
+    }
+
+    .sec {
+      font-family: var(--fd);
+      font-size: 1.7rem;
+      margin: 0 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      line-height: 1.2;
+      border-bottom: 3px solid var(--line);
+      padding-bottom: 8px;
+    }
+
+    .jp {
+      background: var(--fg);
+      color: var(--bg);
+      padding: 2px 8px;
+      font-size: 1rem;
+    }
+
+    /* Portadas de Anime */
+    .cover {
+      aspect-ratio: 3/4;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, hsl(var(--h) 62% 56%), hsl(calc(var(--h) + 45) 55% 28%));
+      color: #fff;
+      font-family: var(--fcover);
+      flex: none;
+      max-width: 100%;
+      border: 2px solid var(--line);
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: multiply;
+      background: radial-gradient(rgba(0, 0, 0, .28) 1px, transparent 1.5px);
+      background-size: 5px 5px;
+    }
+
+    .cover span {
+      font-size: 2.2rem;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover.sm {
+      width: 56px;
+    }
+
+    .cover.sm span {
+      font-size: 1.5rem;
+    }
+
+    .cover.big {
+      width: min(220px, 100%);
+    }
+
+    .cover.big span {
+      font-size: 5rem;
+    }
+
+    /* Layouts principales */
+    .day,
+    .row,
+    .card,
+    .sheet,
+    .panel {
+      background: var(--surface);
+      border: 3px solid var(--line);
+      box-shadow: 6px 6px 0 var(--line);
+    }
+
+    .day {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      cursor: pointer;
+      padding: 24px;
+      transform: rotate(-.4deg);
+    }
+
+    .day-body {
+      min-width: 0;
+    }
+
+    .day h3 {
+      font-family: var(--fd);
+      font-size: 2.5rem;
+      margin: 4px 0;
+      line-height: 1.1;
+      text-wrap: balance;
+    }
+
+    .kicker {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .72rem;
+      color: var(--accent);
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: .82rem;
+      margin: 2px 0 6px;
+    }
+
+    .excerpt {
+      max-width: 64ch;
+      margin: 8px 0;
+    }
+
+    /* Sistema de Calificación */
+    .rate {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stars {
+      display: inline-flex;
+      gap: 1px;
+      letter-spacing: 0;
+    }
+
+    .st {
+      color: var(--star-off);
+    }
+
+    .st.on {
+      color: var(--star);
+    }
+
+    .score {
+      font-family: var(--fd);
+      font-variant-numeric: tabular-nums;
+      font-size: 1.05rem;
+      color: var(--accent);
+    }
+
+    .comm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .8rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .acts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .duo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+      gap: 40px 32px;
+      margin-block: 44px;
+    }
+
+    .duo section {
+      margin-block: 0;
+    }
+
+    /* Listas y Rankings */
+    ol.rank {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+      cursor: pointer;
+      padding: 12px;
+      transition: transform .15s;
+    }
+
+    .row:hover,
+    .card:hover {
+      transform: translate(-2px, -2px);
+    }
+
+    .rb h4 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .rk {
+      font-family: var(--fd);
+      font-size: 2rem;
+      min-width: 1.4em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .r1 .rk {
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      min-width: auto;
+      transform: rotate(-8deg);
+    }
+
+    .adm {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .hist .cover.sm {
+      width: 76px;
+    }
+
+    .hist .cover.sm span {
+      font-size: 2rem;
+    }
+
+    /* Grid de tarjetas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      padding: 10px;
+      transition: transform .15s;
+    }
+
+    .card .cover {
+      width: 100%;
+    }
+
+    .card h4 {
+      margin: 2px 0 0;
+      font-size: .95rem;
+      line-height: 1.25;
+    }
+
+    /* Paneles de Admin y Formularios */
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      padding: 12px;
+      list-style: none;
+    }
+
+    .panel {
+      padding: 20px;
+      margin-block: 4px 8px;
+      border-color: var(--danger);
+      box-shadow: 6px 6px 0 var(--danger);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .panel h2 {
+      font-family: var(--fd);
+      margin: 0 0 4px;
+      font-size: 1.3rem;
+    }
+
+    .panel .note {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .pgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+      gap: 12px;
+    }
+
+    .pgrid .wide {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    input,
+    textarea,
+    select {
+      font: inherit;
+      color: var(--fg);
+      background: var(--field);
+      border: 2px solid var(--line);
+      padding: 8px 10px;
+      width: 100%;
+    }
+
+    .checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      align-items: center;
+    }
+
+    .checks label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--fg);
+      font-size: .9rem;
+      cursor: pointer;
+    }
+
+    .checks input[type=checkbox] {
+      width: auto;
+      cursor: pointer;
+    }
+
+    .checks input[type=number] {
+      width: 72px;
+    }
+
+    /* Modal (Overlay y Sheet) */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--scrim);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      z-index: 20;
+      transition: opacity 0.3s ease;
+    }
+
+    .sheet {
+      width: min(780px, 100%);
+      max-height: calc(100dvh - 32px);
+      overflow: auto;
+      padding: 24px;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: 0;
+      font-size: 1.3rem;
+      color: var(--muted);
+    }
+
+    .close:hover {
+      color: var(--danger);
+    }
+
+    .d-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .d-head h3 {
+      font-family: var(--fd);
+      font-size: 1.8rem;
+      margin: 8px 0 2px;
+      line-height: 1.1;
+      text-wrap: balance;
+      padding-right: 28px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: .7rem;
+      padding: 3px 8px;
+      background: var(--chip);
+      color: var(--chip-fg);
+      font-weight: 700;
+      letter-spacing: .04em;
+      transform: rotate(-2deg);
+    }
+
+    .by {
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    .d-review {
+      margin-block: 22px;
+    }
+
+    .d-review p:last-child {
+      margin: 6px 0 0;
+      max-width: 66ch;
+    }
+
+    .admbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 12px;
+      border: 1px dashed var(--danger);
+      margin-bottom: 22px;
+    }
+
+    .admbar>span {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--danger);
+      font-weight: 700;
+      width: 100%;
+    }
+
+    .x.in {
+      color: var(--fg);
+      border-color: var(--fg);
+    }
+
+    /* Sección de Comentarios */
+    .c-title {
+      font-family: var(--fd);
+      font-size: 1.25rem;
+      margin: 0 0 12px;
+    }
+
+    .cform {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pick {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pick legend {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      padding: 0;
+    }
+
+    .pick label {
+      display: block;
+      position: relative;
+    }
+
+    .pick input {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+    }
+
+    .pick span {
+      font-size: 1.7rem;
+      color: var(--star-off);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .pick label.on span {
+      color: var(--star);
+    }
+
+    .pick input:focus-visible+span {
+      outline: 2px solid var(--accent2);
+    }
+
+    .pick .clear {
+      font-size: .75rem;
+      margin-left: 8px;
+    }
+
+    .clist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .clist>li {
+      background: var(--bg);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      position: relative;
+      margin-left: 10px;
+      padding: 12px 14px;
+    }
+
+    .clist>li::before {
+      content: "";
+      position: absolute;
+      left: -11px;
+      top: 14px;
+      border: 9px solid transparent;
+      border-right-color: var(--line);
+      border-left: 0;
+    }
+
+    .clist>li.empty {
+      border: 0;
+      margin: 0;
+      padding: 12px;
+    }
+
+    .clist>li.empty::before {
+      display: none;
+    }
+
+    .c-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      align-items: center;
+      font-size: .88rem;
+    }
+
+    .c-top time {
+      color: var(--muted);
+      margin-left: auto;
+      font-size: .75rem;
+    }
+
+    .clist p {
+      margin: 6px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    .nostar {
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    .c-adm {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%);
+      background: var(--fg);
+      color: var(--bg);
+      padding: 10px 18px;
+      z-index: 30;
+      font-size: .9rem;
+      max-width: calc(100% - 32px);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    footer {
+      border-top: 3px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: .8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    /* Responsive */
+    @media(max-width: 600px) {
+      .day {
+        grid-template-columns: 1fr;
+      }
+
+      .day .cover.big {
+        width: 150px;
+      }
+
+      .day .cover.big span {
+        font-size: 3.6rem;
+      }
+    }
+
+    @media(max-width: 560px) {
+      .row {
+        grid-template-columns: auto auto minmax(0, 1fr);
+      }
+
+      .row .adm {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media(max-width: 520px) {
+      .d-head {
+        grid-template-columns: 1fr;
+      }
+
+      .d-head .cover.big {
+        width: 110px;
+      }
+    }
+
+    @media(min-width: 620px) {
+      .grid .card:nth-child(7n+1) {
+        grid-column: span 2;
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .grid .card:nth-child(7n+1) .cover {
+        width: 45%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* Keyframes para UX */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-
-<div class="wrap">
-  <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true">判</span><div><h1>Hanko</h1><p class="tagline">Reseñas de anime con sello propio</p></div></div>
-    <nav aria-label="Secciones"><a class="home" href="index.html">← Estilos</a><a href="#dia">Del día</a><a href="#semanal">Semanal</a><a href="#mensual">Mensual</a><a href="#historico">Histórico</a><a href="#resenas">Reseñas</a></nav>
-    <button id="roleBtn" class="role" type="button">Entrar como admin</button>
-  </header>
-
-  <div id="adminPanel" class="panel" hidden>
-    <h2>Publicar reseña</h2>
-    <p class="note">Modo administrador de demostración. En la versión real esto va detrás de un login y solo el dueño del blog lo ve.</p>
-    <form id="pubForm" class="pgrid">
-      <label class="wide">Título del anime<input id="pTitle" required maxlength="80" placeholder="Ej. Vinland Saga"></label>
-      <label>Kanji o inicial de portada<input id="pJp" maxlength="2" placeholder="戦"></label>
-      <label>Año<input id="pYear" type="number" min="1960" max="2030" value="2026" required></label>
-      <label>Estudio<input id="pStudio" maxlength="40" placeholder="MAPPA" required></label>
-      <label>Género<input id="pGenre" maxlength="40" placeholder="Acción · Drama" required></label>
-      <label>Nota (0–10)<input id="pScore" type="number" min="0" max="10" step="0.1" value="8.5" required></label>
-      <label>Estrellas<select id="pStars"><option>5</option><option selected>4</option><option>3</option><option>2</option><option>1</option></select></label>
-      <label class="wide">Reseña<textarea id="pText" rows="4" required maxlength="1200" placeholder="Lo que te pareció, sin spoilers fuertes…"></textarea></label>
-      <div class="wide checks">
-        <label><input type="checkbox" id="pHist"> Top histórico, puesto</label><input id="pHistPos" type="number" min="1" value="1" aria-label="Puesto en el top histórico">
-        <label><input type="checkbox" id="pWeek"> Top semanal</label>
-        <label><input type="checkbox" id="pMonth"> Top mensual</label>
-        <label><input type="checkbox" id="pDay"> Anime del día</label>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">判</span>
+        <div>
+          <h1>Hanko</h1>
+          <p class="tagline">Reseñas de anime con sello propio</p>
+        </div>
       </div>
-      <div class="wide"><button class="btn" type="submit">Publicar reseña</button></div>
-    </form>
+      <nav aria-label="Secciones">
+        <a class="home" href="index.html">← Estilos</a>
+        <a href="#dia">Del día</a>
+        <a href="#semanal">Semanal</a>
+        <a href="#mensual">Mensual</a>
+        <a href="#historico">Histórico</a>
+        <a href="#resenas">Reseñas</a>
+      </nav>
+      <button id="roleBtn" class="role" type="button">Entrar como admin</button>
+    </header>
+
+    <div id="adminPanel" class="panel" hidden>
+      <h2>Publicar reseña</h2>
+      <p class="note">Modo administrador de demostración. En la versión real esto va detrás de un login y solo el dueño
+        del blog lo ve.</p>
+      <form id="pubForm" class="pgrid">
+        <label class="wide">Título del anime<input id="pTitle" required maxlength="80"
+            placeholder="Ej. Vinland Saga"></label>
+        <label>Kanji o inicial de portada<input id="pJp" maxlength="2" placeholder="戦"></label>
+        <label>Año<input id="pYear" type="number" min="1960" max="2030" value="2026" required></label>
+        <label>Estudio<input id="pStudio" maxlength="40" placeholder="MAPPA" required></label>
+        <label>Género<input id="pGenre" maxlength="40" placeholder="Acción · Drama" required></label>
+        <label>Nota (0–10)<input id="pScore" type="number" min="0" max="10" step="0.1" value="8.5" required></label>
+        <label>Estrellas
+          <select id="pStars">
+            <option>5</option>
+            <option selected>4</option>
+            <option>3</option>
+            <option>2</option>
+            <option>1</option>
+          </select>
+        </label>
+        <label class="wide">Reseña<textarea id="pText" rows="4" required maxlength="1200"
+            placeholder="Lo que te pareció, sin spoilers fuertes…"></textarea></label>
+
+        <div class="wide checks">
+          <label><input type="checkbox" id="pHist"> Top histórico, puesto</label>
+          <input id="pHistPos" type="number" min="1" value="1" aria-label="Puesto en el top histórico">
+          <label><input type="checkbox" id="pWeek"> Top semanal</label>
+          <label><input type="checkbox" id="pMonth"> Top mensual</label>
+          <label><input type="checkbox" id="pDay"> Anime del día</label>
+        </div>
+        <div class="wide"><button class="btn" type="submit">Publicar reseña</button></div>
+      </form>
+    </div>
+
+    <main>
+      <section id="dia">
+        <h2 class="sec"><span class="jp">今日</span>Anime del día</h2>
+        <div id="dayBox"></div>
+      </section>
+      <div class="duo">
+        <section id="semanal">
+          <h2 class="sec"><span class="jp">週</span>Top semanal</h2>
+          <ol id="weekList" class="rank"></ol>
+        </section>
+        <section id="mensual">
+          <h2 class="sec"><span class="jp">月</span>Top mensual</h2>
+          <ol id="monthList" class="rank"></ol>
+        </section>
+      </div>
+      <section id="historico">
+        <h2 class="sec"><span class="jp">殿堂</span>Top histórico</h2>
+        <ol id="histList" class="rank hist"></ol>
+      </section>
+      <section id="resenas">
+        <h2 class="sec"><span class="jp">全</span>Todas las reseñas</h2>
+        <div id="allGrid" class="grid"></div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Hanko · demo de diseño. Los datos se guardan solo en este navegador.</span>
+      <a class="x" href="index.html" style="text-decoration:none">Ver los otros estilos</a>
+      <button id="resetBtn" class="x" type="button">Restablecer demo</button>
+    </footer>
   </div>
 
-  <main>
-    <section id="dia"><h2 class="sec"><span class="jp">今日</span>Anime del día</h2><div id="dayBox"></div></section>
-    <div class="duo">
-      <section id="semanal"><h2 class="sec"><span class="jp">週</span>Top semanal</h2><ol id="weekList" class="rank"></ol></section>
-      <section id="mensual"><h2 class="sec"><span class="jp">月</span>Top mensual</h2><ol id="monthList" class="rank"></ol></section>
-    </div>
-    <section id="historico"><h2 class="sec"><span class="jp">殿堂</span>Top histórico</h2><ol id="histList" class="rank hist"></ol></section>
-    <section id="resenas"><h2 class="sec"><span class="jp">全</span>Todas las reseñas</h2><div id="allGrid" class="grid"></div></section>
-  </main>
+  <div id="overlay" hidden>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" tabindex="-1"></div>
+  </div>
+  <div id="toast" role="status" hidden></div>
 
-  <footer><span>Hanko · demo de diseño. Los datos se guardan solo en este navegador.</span><a class="x" href="index.html" style="text-decoration:none">Ver los otros estilos</a><button id="resetBtn" class="x" type="button">Restablecer demo</button></footer>
-</div>
+  <script>
+    // Configuración base y utilidades
+    const CFG = { key: "hanko", star: "★", dayKicker: "Sello del día", commLabel: "Lectores" };
+    const KEY = 'anime-demo-' + CFG.key;
+    const H = 3600e3;
+    const NOW = Date.now();
 
-<div id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true" tabindex="-1"></div></div>
-<div id="toast" role="status" hidden></div>
+    // Datos semilla (Seed Data)
+    const SEED = {
+      anime: [
+        { id: 'fmab', title: 'Fullmetal Alchemist: Brotherhood', jp: '鋼', year: 2009, studio: 'Bones', genre: 'Aventura · Fantasía', score: 9.6, stars: 5, hue: 12, text: 'La historia más redonda que he visto. Cada personaje tiene un arco que cierra, el ritmo casi nunca baja y el final paga todo lo que promete desde el capítulo uno. Si alguien me pide un solo anime para empezar, es este.' },
+        { id: 'steins', title: 'Steins;Gate', jp: '時', year: 2011, studio: 'White Fox', genre: 'Ciencia ficción · Thriller', score: 9.4, stars: 5, hue: 150, text: 'Los primeros capítulos son lentos a propósito, y cuando todo hace clic ya no puedes parar. Okabe pasa de chiste a uno de los protagonistas mejor escritos del medio.' },
+        { id: 'frieren', title: 'Sousou no Frieren', jp: '葬', year: 2023, studio: 'Madhouse', genre: 'Fantasía · Drama', score: 9.3, stars: 5, hue: 190, text: 'Una fantasía que trata del tiempo y de lo que dejamos en los demás. Tranquila, bonita, y con peleas que cuando llegan se sienten enormes.' },
+        { id: 'monster', title: 'Monster', jp: '怪', year: 2004, studio: 'Madhouse', genre: 'Thriller · Misterio', score: 9.2, stars: 5, hue: 0, text: 'Thriller psicológico de 74 capítulos que no se siente largo. Johan es de los villanos más inquietantes que existen porque casi nunca lo ves actuar directamente.' },
+        { id: 'bebop', title: 'Cowboy Bebop', jp: '宇', year: 1998, studio: 'Sunrise', genre: 'Sci-fi · Noir', score: 9.0, stars: 5, hue: 225, text: 'Jazz, cazarrecompensas y melancolía espacial. Casi todos los episodios funcionan solos y aun así el final duele. Ha envejecido mejor que muchos animes recientes.' },
+        { id: 'mushishi', title: 'Mushishi', jp: '蟲', year: 2005, studio: 'Artland', genre: 'Slice of life · Sobrenatural', score: 8.9, stars: 4, hue: 95, text: 'Para ver de noche y sin prisa. Ginko va de pueblo en pueblo resolviendo problemas con los mushi y cada capítulo es como un cuento folclórico. Muy relajante.' },
+        { id: 'dandadan', title: 'Dandadan', jp: '霊', year: 2024, studio: 'Science SARU', genre: 'Acción · Comedia', score: 8.6, stars: 4, hue: 300, text: 'Caos puro: fantasmas, aliens y una comedia romántica en medio. La animación de Science SARU va a mil y el opening no se salta.' },
+        { id: 'apoth', title: 'Kusuriya no Hitorigoto', jp: '薬', year: 2023, studio: 'OLM · TOHO', genre: 'Misterio · Histórico', score: 8.8, stars: 4, hue: 330, text: 'Maomao resolviendo misterios en el palacio con puro conocimiento de venenos. Inteligente, divertido y con una protagonista que no se parece a ninguna otra.' },
+        { id: 'kaiju', title: 'Kaiju No. 8', jp: '獣', year: 2024, studio: 'Production I.G', genre: 'Acción · Sci-fi', score: 7.8, stars: 4, hue: 40, text: 'Un protagonista adulto en un shonen ya es raro y se agradece. Las peleas contra kaijus se ven muy bien, aunque la historia es bastante predecible.' }
+      ],
+      lists: {
+        hist: ['fmab', 'steins', 'frieren', 'monster', 'bebop', 'mushishi'],
+        week: ['dandadan', 'apoth', 'frieren'],
+        month: ['frieren', 'dandadan', 'apoth', 'kaiju']
+      },
+      day: 'mushishi',
+      comments: [
+        { id: 'c1', aid: 'fmab', user: 'Kenji_GT', stars: 5, text: 'Totalmente de acuerdo, el número uno merecido. El capítulo del teniente Hughes todavía me duele.', ts: NOW - 30 * H },
+        { id: 'c2', aid: 'fmab', user: 'luna.otaku', stars: 4, text: 'Muy bueno, pero yo pondría Steins;Gate arriba. Igual respeto el top.', ts: NOW - 20 * H },
+        { id: 'c3', aid: 'mushishi', user: 'Pablo R.', stars: 5, text: 'Nadie lo recomienda nunca y es buenísimo. Gracias por ponerlo como anime del día.', ts: NOW - 3 * H },
+        { id: 'c4', aid: 'frieren', user: 'Sofi', stars: 5, text: 'Lloré con el flashback de Himmel. Nada más que decir.', ts: NOW - 50 * H },
+        { id: 'c5', aid: 'dandadan', user: 'Kenji_GT', stars: 4, text: 'El capítulo de la abuelita turbo es de lo mejor del año.', ts: NOW - 8 * H },
+        { id: 'c6', aid: 'steins', user: 'mayuri_fan', stars: 0, text: 'Tutturu~ La vi por tu recomendación y ahora la estoy repitiendo.', ts: NOW - 70 * H }
+      ]
+    };
 
-<script>
-const CFG = {"key": "hanko", "star": "★", "dayKicker": "Sello del día", "commLabel": "Lectores"};
-const KEY = 'anime-demo-' + CFG.key;
-const H = 3600e3, NOW = Date.now();
-const SEED = {
-  anime: [
-    {id:'fmab',title:'Fullmetal Alchemist: Brotherhood',jp:'鋼',year:2009,studio:'Bones',genre:'Aventura · Fantasía',score:9.6,stars:5,hue:12,
-     text:'La historia más redonda que he visto. Cada personaje tiene un arco que cierra, el ritmo casi nunca baja y el final paga todo lo que promete desde el capítulo uno. Si alguien me pide un solo anime para empezar, es este.'},
-    {id:'steins',title:'Steins;Gate',jp:'時',year:2011,studio:'White Fox',genre:'Ciencia ficción · Thriller',score:9.4,stars:5,hue:150,
-     text:'Los primeros capítulos son lentos a propósito, y cuando todo hace clic ya no puedes parar. Okabe pasa de chiste a uno de los protagonistas mejor escritos del medio.'},
-    {id:'frieren',title:'Sousou no Frieren',jp:'葬',year:2023,studio:'Madhouse',genre:'Fantasía · Drama',score:9.3,stars:5,hue:190,
-     text:'Una fantasía que trata del tiempo y de lo que dejamos en los demás. Tranquila, bonita, y con peleas que cuando llegan se sienten enormes.'},
-    {id:'monster',title:'Monster',jp:'怪',year:2004,studio:'Madhouse',genre:'Thriller · Misterio',score:9.2,stars:5,hue:0,
-     text:'Thriller psicológico de 74 capítulos que no se siente largo. Johan es de los villanos más inquietantes que existen porque casi nunca lo ves actuar directamente.'},
-    {id:'bebop',title:'Cowboy Bebop',jp:'宇',year:1998,studio:'Sunrise',genre:'Sci-fi · Noir',score:9.0,stars:5,hue:225,
-     text:'Jazz, cazarrecompensas y melancolía espacial. Casi todos los episodios funcionan solos y aun así el final duele. Ha envejecido mejor que muchos animes recientes.'},
-    {id:'mushishi',title:'Mushishi',jp:'蟲',year:2005,studio:'Artland',genre:'Slice of life · Sobrenatural',score:8.9,stars:4,hue:95,
-     text:'Para ver de noche y sin prisa. Ginko va de pueblo en pueblo resolviendo problemas con los mushi y cada capítulo es como un cuento folclórico. Muy relajante.'},
-    {id:'dandadan',title:'Dandadan',jp:'霊',year:2024,studio:'Science SARU',genre:'Acción · Comedia',score:8.6,stars:4,hue:300,
-     text:'Caos puro: fantasmas, aliens y una comedia romántica en medio. La animación de Science SARU va a mil y el opening no se salta.'},
-    {id:'apoth',title:'Kusuriya no Hitorigoto',jp:'薬',year:2023,studio:'OLM · TOHO',genre:'Misterio · Histórico',score:8.8,stars:4,hue:330,
-     text:'Maomao resolviendo misterios en el palacio con puro conocimiento de venenos. Inteligente, divertido y con una protagonista que no se parece a ninguna otra.'},
-    {id:'kaiju',title:'Kaiju No. 8',jp:'獣',year:2024,studio:'Production I.G',genre:'Acción · Sci-fi',score:7.8,stars:4,hue:40,
-     text:'Un protagonista adulto en un shonen ya es raro y se agradece. Las peleas contra kaijus se ven muy bien, aunque la historia es bastante predecible.'}
-  ],
-  lists:{hist:['fmab','steins','frieren','monster','bebop','mushishi'],week:['dandadan','apoth','frieren'],month:['frieren','dandadan','apoth','kaiju']},
-  day:'mushishi',
-  comments:[
-    {id:'c1',aid:'fmab',user:'Kenji_GT',stars:5,text:'Totalmente de acuerdo, el número uno merecido. El capítulo del teniente Hughes todavía me duele.',ts:NOW-30*H},
-    {id:'c2',aid:'fmab',user:'luna.otaku',stars:4,text:'Muy bueno, pero yo pondría Steins;Gate arriba. Igual respeto el top.',ts:NOW-20*H},
-    {id:'c3',aid:'mushishi',user:'Pablo R.',stars:5,text:'Nadie lo recomienda nunca y es buenísimo. Gracias por ponerlo como anime del día.',ts:NOW-3*H},
-    {id:'c4',aid:'frieren',user:'Sofi',stars:5,text:'Lloré con el flashback de Himmel. Nada más que decir.',ts:NOW-50*H},
-    {id:'c5',aid:'dandadan',user:'Kenji_GT',stars:4,text:'El capítulo de la abuelita turbo es de lo mejor del año.',ts:NOW-8*H},
-    {id:'c6',aid:'steins',user:'mayuri_fan',stars:0,text:'Tutturu~ La vi por tu recomendación y ahora la estoy repitiendo.',ts:NOW-70*H}
-  ]
-};
-let S = load(), admin = false, cur = null;
-function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return JSON.parse(JSON.stringify(SEED))}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-const $=s=>document.querySelector(s);
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const byId=id=>S.anime.find(a=>a.id===id);
-const comm=id=>S.comments.filter(c=>c.aid===id);
-function avg(id){const r=comm(id).filter(c=>c.stars>0);return r.length?r.reduce((s,c)=>s+c.stars,0)/r.length:0}
-function stars(n){let o='';for(let i=1;i<=5;i++)o+=`<span class="st${i<=Math.round(n)?' on':''}">${CFG.star}</span>`;return `<span class="stars" role="img" aria-label="${(+n).toFixed(1)} de 5 estrellas">${o}</span>`}
-const cover=(a,c='')=>`<div class="cover ${c}" style="--h:${a.hue}" aria-hidden="true"><span>${esc(a.jp||a.title[0])}</span></div>`;
-const meta=a=>`${a.year} · ${esc(a.studio)} · ${esc(a.genre)}`;
-const rate=a=>`<div class="rate">${stars(a.stars)}<b class="score">${(+a.score).toFixed(1)}</b></div>`;
-function community(a){const n=comm(a.id).length,r=avg(a.id);return `<span class="comm">${CFG.commLabel}: ${r?stars(r)+' '+r.toFixed(1):'sin votos'} · ${n} ${n===1?'comentario':'comentarios'}</span>`}
-const fmt=ts=>new Date(ts).toLocaleDateString('es',{day:'numeric',month:'short'});
-const LISTNAME={week:'Top semanal',month:'Top mensual',hist:'Top histórico',day:'Anime del día'};
+    const LISTNAME = { week: 'Top semanal', month: 'Top mensual', hist: 'Top histórico', day: 'Anime del día' };
 
-function renderDay(){const a=byId(S.day),el=$('#dayBox');
-  if(!a){el.innerHTML='<p class="empty">El admin todavía no elige el anime del día.</p>';return}
-  el.innerHTML=`<article class="day" data-open="${a.id}">${cover(a,'big')}<div class="day-body"><p class="kicker">${CFG.dayKicker}</p><h3>${esc(a.title)}</h3><p class="meta">${meta(a)}</p>${rate(a)}<p class="excerpt">${esc(a.text)}</p>${community(a)}<div class="acts"><button class="btn" type="button" data-open="${a.id}">Leer y comentar</button>${admin?`<button class="x" type="button" data-rm="day" data-id="${a.id}">Quitar del día</button>`:''}</div></div></article>`}
-function rankList(el,list){const ids=S.lists[list];
-  el.innerHTML=ids.map(byId).filter(Boolean).map((a,i)=>`<li class="row r${i+1}" data-open="${a.id}" tabindex="0"><span class="rk">${i+1}</span>${cover(a,'sm')}<div class="rb"><h4>${esc(a.title)}</h4><p class="meta">${meta(a)}</p>${list==='hist'?`<p class="excerpt">${esc(a.text)}</p>`:''}${rate(a)}${community(a)}</div>${admin?`<div class="adm"><button class="x" type="button" data-up="${list}" data-id="${a.id}" ${i?'':'disabled'} aria-label="Subir un puesto">Subir</button><button class="x" type="button" data-rm="${list}" data-id="${a.id}">Quitar</button></div>`:''}</li>`).join('')||`<li class="empty">Sin animes en el ${LISTNAME[list].toLowerCase()} todavía.</li>`}
-function renderGrid(){$('#allGrid').innerHTML=S.anime.map(a=>`<article class="card" data-open="${a.id}" tabindex="0">${cover(a)}<h4>${esc(a.title)}</h4>${rate(a)}<span class="comm">${comm(a.id).length} comentarios</span></article>`).join('')||'<p class="empty">No hay reseñas publicadas.</p>'}
-function render(){document.body.classList.toggle('admin',admin);$('#adminPanel').hidden=!admin;
-  $('#roleBtn').textContent=admin?'Salir del modo admin':'Entrar como admin';
-  renderDay();rankList($('#weekList'),'week');rankList($('#monthList'),'month');rankList($('#histList'),'hist');renderGrid();
-  if(cur&&!$('#overlay').hidden)renderDetail()}
+    // Estado global de la app
+    let S = load(), admin = false, cur = null, toastTimer;
 
-function inList(l,id){return l==='day'?S.day===id:S.lists[l].includes(id)}
-function renderDetail(){const a=byId(cur);if(!a)return closeDetail();
-  const cs=comm(a.id).sort((x,y)=>y.ts-x.ts);
-  const hp=S.lists.hist.indexOf(a.id);
-  const tags=[S.day===a.id&&'Anime del día',S.lists.week.includes(a.id)&&'Top semanal',S.lists.month.includes(a.id)&&'Top mensual',hp>-1&&`#${hp+1} histórico`].filter(Boolean);
-  let savedName='';try{savedName=localStorage.getItem(KEY+'-name')||''}catch(e){}
-  $('#sheet').innerHTML=`<button class="close" type="button" data-close aria-label="Cerrar">✕</button>
-  <div class="d-head">${cover(a,'big')}<div style="min-width:0"><div class="tags">${tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><h3>${esc(a.title)}</h3><p class="meta">${meta(a)}</p><div class="rate">${stars(a.stars)}<b class="score">${(+a.score).toFixed(1)}</b><span class="by">nota del admin</span></div>${community(a)}</div></div>
-  <div class="d-review"><p class="kicker">Reseña del admin</p><p>${esc(a.text)}</p></div>
-  ${admin?`<div class="admbar"><span>Herramientas de admin</span>${['day','week','month','hist'].map(l=>`<button class="x${inList(l,a.id)?' in':''}" type="button" data-tog="${l}">${inList(l,a.id)?'✓ ':'+ '}${LISTNAME[l]}</button>`).join('')}<button class="x" type="button" data-del="${a.id}">Eliminar reseña</button></div>`:''}
-  <h4 class="c-title">Comentarios (${cs.length})</h4>
-  <form id="cForm" class="cform"><label>Tu nombre<input id="cName" required maxlength="30" value="${esc(savedName)}"></label>
-  <fieldset class="pick" id="pick"><legend>Tus estrellas (opcional)</legend>${[1,2,3,4,5].map(n=>`<label><input type="radio" name="cStars" value="${n}" aria-label="${n} estrella${n>1?'s':''}"><span>${CFG.star}</span></label>`).join('')}<button class="x clear" type="button" data-clearstars>Sin estrellas</button></fieldset>
-  <label>Comentario<textarea id="cText" required maxlength="500" rows="3" placeholder="¿Qué te pareció?"></textarea></label><div><button class="btn" type="submit">Publicar comentario</button></div></form>
-  <ul class="clist">${cs.map(c=>`<li><div class="c-top"><b>${esc(c.user)}</b>${c.stars?stars(c.stars):'<span class="nostar">sin estrellas</span>'}<time>${fmt(c.ts)}</time></div><p>${esc(c.text)}</p>${admin?`<div class="c-adm">${c.stars?`<button class="x" type="button" data-unstar="${c.id}">Quitar estrellas</button>`:''}<button class="x" type="button" data-delc="${c.id}">Borrar comentario</button></div>`:''}</li>`).join('')||'<li class="empty">Nadie ha comentado todavía. Sé el primero.</li>'}</ul>`}
-function openDetail(id){cur=id;renderDetail();$('#overlay').hidden=false;document.body.classList.add('lock');$('#sheet').scrollTop=0;$('#sheet').focus()}
-function closeDetail(){cur=null;$('#overlay').hidden=true;document.body.classList.remove('lock')}
-let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2200)}
-function arm(b,m){if(b.classList.contains('armed'))return true;b.classList.add('armed');b.dataset.orig=b.textContent;b.textContent=m;setTimeout(()=>{if(b.isConnected){b.classList.remove('armed');b.textContent=b.dataset.orig}},3000);return false}
-function commit(m){save();render();if(m)toast(m)}
+    // Funciones principales
+    function load() {
+      try { const r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch (e) { }
+      return JSON.parse(JSON.stringify(SEED));
+    }
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+    function commit(m) { save(); render(); if (m) toast(m); }
 
-document.addEventListener('click',e=>{const t=e.target;let b;
-  if(t.id==='overlay'||t.closest('[data-close]'))return closeDetail();
-  if(t.closest('#roleBtn')){admin=!admin;render();return toast(admin?'Modo admin activado':'Viendo como visitante')}
-  if((b=t.closest('#resetBtn'))){if(!arm(b,'¿Seguro? Toca otra vez'))return;S=JSON.parse(JSON.stringify(SEED));closeDetail();return commit('Demo restablecida')}
-  if((b=t.closest('[data-rm]'))){const l=b.dataset.rm,id=b.dataset.id;if(l==='day')S.day=null;else S.lists[l]=S.lists[l].filter(x=>x!==id);return commit('Quitado de '+LISTNAME[l])}
-  if((b=t.closest('[data-up]'))){const L=S.lists[b.dataset.up],i=L.indexOf(b.dataset.id);if(i>0)[L[i-1],L[i]]=[L[i],L[i-1]];return commit()}
-  if((b=t.closest('[data-tog]'))){const l=b.dataset.tog;if(l==='day')S.day=S.day===cur?null:cur;else{const L=S.lists[l];S.lists[l]=L.includes(cur)?L.filter(x=>x!==cur):[...L,cur]}return commit(LISTNAME[l]+' actualizado')}
-  if((b=t.closest('[data-del]'))){if(!arm(b,'¿Eliminar? Toca otra vez'))return;const id=b.dataset.del;S.anime=S.anime.filter(a=>a.id!==id);S.comments=S.comments.filter(c=>c.aid!==id);for(const k in S.lists)S.lists[k]=S.lists[k].filter(x=>x!==id);if(S.day===id)S.day=null;closeDetail();return commit('Reseña eliminada')}
-  if((b=t.closest('[data-delc]'))){S.comments=S.comments.filter(c=>c.id!==b.dataset.delc);return commit('Comentario borrado')}
-  if((b=t.closest('[data-unstar]'))){const c=S.comments.find(c=>c.id===b.dataset.unstar);if(c)c.stars=0;return commit('Estrellas quitadas')}
-  if(t.closest('[data-clearstars]')){document.querySelectorAll('#pick input').forEach(i=>i.checked=false);paintPick();return}
-  if((b=t.closest('[data-open]'))&&!t.closest('.adm')){openDetail(b.dataset.open)}
-});
-function paintPick(){const v=+(document.querySelector('#pick input:checked')?.value||0);document.querySelectorAll('#pick label').forEach((l,i)=>l.classList.toggle('on',i<v))}
-document.addEventListener('change',e=>{if(e.target.name==='cStars')paintPick()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').hidden)closeDetail();
-  if(e.key==='Enter'&&e.target.matches('[data-open]:not(button)'))openDetail(e.target.dataset.open)});
-document.addEventListener('submit',e=>{e.preventDefault();
-  if(e.target.id==='cForm'){const user=$('#cName').value.trim(),text=$('#cText').value.trim();if(!user||!text)return;
-    try{localStorage.setItem(KEY+'-name',user)}catch(_){}
-    S.comments.push({id:'c'+Date.now(),aid:cur,user,text,stars:+(document.querySelector('#pick input:checked')?.value||0),ts:Date.now()});return commit('Comentario publicado')}
-  if(e.target.id==='pubForm'){const v=id=>$(id).value.trim();
-    const a={id:'a'+Date.now(),title:v('#pTitle'),jp:v('#pJp'),year:+v('#pYear'),studio:v('#pStudio'),genre:v('#pGenre'),score:Math.min(10,Math.max(0,+v('#pScore'))),stars:+v('#pStars'),text:v('#pText'),hue:Math.floor(Math.random()*360)};
-    S.anime.unshift(a);
-    if($('#pHist').checked){const p=Math.max(1,+v('#pHistPos'))-1;S.lists.hist.splice(Math.min(p,S.lists.hist.length),0,a.id)}
-    if($('#pWeek').checked)S.lists.week.push(a.id);if($('#pMonth').checked)S.lists.month.push(a.id);if($('#pDay').checked)S.day=a.id;
-    e.target.reset();return commit('Reseña publicada: '+a.title)}
-});
-render();
-</script>
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const byId = id => S.anime.find(a => a.id === id);
+    const comm = id => S.comments.filter(c => c.aid === id);
+    const avg = id => { const r = comm(id).filter(c => c.stars > 0); return r.length ? r.reduce((s, c) => s + c.stars, 0) / r.length : 0; };
+    const fmt = ts => new Date(ts).toLocaleDateString('es', { day: 'numeric', month: 'short' });
+
+    // Componentes UI
+    function stars(n) {
+      let o = '';
+      for (let i = 1; i <= 5; i++) o += `<span class="st${i <= Math.round(n) ? ' on' : ''}">${CFG.star}</span>`;
+      return `<span class="stars" role="img" aria-label="${(+n).toFixed(1)} de 5 estrellas">${o}</span>`;
+    }
+    const cover = (a, c = '') => `<div class="cover ${c}" style="--h:${a.hue}" aria-hidden="true"><span>${esc(a.jp || a.title[0])}</span></div>`;
+    const meta = a => `${a.year} · ${esc(a.studio)} · ${esc(a.genre)}`;
+    const rate = a => `<div class="rate">${stars(a.stars)}<b class="score">${(+a.score).toFixed(1)}</b></div>`;
+    const community = a => {
+      const n = comm(a.id).length, r = avg(a.id);
+      return `<span class="comm">${CFG.commLabel}: ${r ? stars(r) + ' ' + r.toFixed(1) : 'sin votos'} · ${n} ${n === 1 ? 'comentario' : 'comentarios'}</span>`;
+    };
+
+    // Funciones de Renderizado
+    function renderDay() {
+      const a = byId(S.day), el = $('#dayBox');
+      if (!a) { el.innerHTML = '<p class="empty">El admin todavía no elige el anime del día.</p>'; return; }
+      el.innerHTML = `
+      <article class="day" data-open="${a.id}">
+        ${cover(a, 'big')}
+        <div class="day-body">
+          <p class="kicker">${CFG.dayKicker}</p>
+          <h3>${esc(a.title)}</h3>
+          <p class="meta">${meta(a)}</p>
+          ${rate(a)}
+          <p class="excerpt">${esc(a.text)}</p>
+          ${community(a)}
+          <div class="acts">
+            <button class="btn" type="button" data-open="${a.id}">Leer y comentar</button>
+            ${admin ? `<button class="x" type="button" data-rm="day" data-id="${a.id}">Quitar del día</button>` : ''}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function rankList(el, list) {
+      const ids = S.lists[list];
+      el.innerHTML = ids.map(byId).filter(Boolean).map((a, i) => `
+      <li class="row r${i + 1}" data-open="${a.id}" tabindex="0">
+        <span class="rk">${i + 1}</span>${cover(a, 'sm')}
+        <div class="rb">
+          <h4>${esc(a.title)}</h4>
+          <p class="meta">${meta(a)}</p>
+          ${list === 'hist' ? `<p class="excerpt">${esc(a.text)}</p>` : ''}
+          ${rate(a)}${community(a)}
+        </div>
+        ${admin ? `
+        <div class="adm">
+          <button class="x" type="button" data-up="${list}" data-id="${a.id}" ${i ? '' : 'disabled'} aria-label="Subir un puesto">Subir</button>
+          <button class="x" type="button" data-rm="${list}" data-id="${a.id}">Quitar</button>
+        </div>` : ''}
+      </li>`).join('') || `<li class="empty">Sin animes en el ${LISTNAME[list].toLowerCase()} todavía.</li>`;
+    }
+
+    function renderGrid() {
+      $('#allGrid').innerHTML = S.anime.map(a => `
+      <article class="card" data-open="${a.id}" tabindex="0">
+        ${cover(a)}
+        <h4>${esc(a.title)}</h4>
+        ${rate(a)}
+        <span class="comm">${comm(a.id).length} comentarios</span>
+      </article>`).join('') || '<p class="empty">No hay reseñas publicadas.</p>';
+    }
+
+    function render() {
+      document.body.classList.toggle('admin', admin);
+      $('#adminPanel').hidden = !admin;
+      $('#roleBtn').textContent = admin ? 'Salir del modo admin' : 'Entrar como admin';
+
+      renderDay();
+      rankList($('#weekList'), 'week');
+      rankList($('#monthList'), 'month');
+      rankList($('#histList'), 'hist');
+      renderGrid();
+
+      if (cur && !$('#overlay').hidden) renderDetail();
+    }
+
+    // Modal Detail Logic
+    function inList(l, id) { return l === 'day' ? S.day === id : S.lists[l].includes(id); }
+
+    function renderDetail() {
+      const a = byId(cur);
+      if (!a) return closeDetail();
+
+      const cs = comm(a.id).sort((x, y) => y.ts - x.ts);
+      const hp = S.lists.hist.indexOf(a.id);
+      const tags = [
+        S.day === a.id && 'Anime del día',
+        S.lists.week.includes(a.id) && 'Top semanal',
+        S.lists.month.includes(a.id) && 'Top mensual',
+        hp > -1 && `#${hp + 1} histórico`
+      ].filter(Boolean);
+
+      let savedName = '';
+      try { savedName = localStorage.getItem(KEY + '-name') || ''; } catch (e) { }
+
+      $('#sheet').innerHTML = `
+      <button class="close" type="button" data-close aria-label="Cerrar">✕</button>
+      <div class="d-head">
+        ${cover(a, 'big')}
+        <div style="min-width:0">
+          <div class="tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          <h3>${esc(a.title)}</h3>
+          <p class="meta">${meta(a)}</p>
+          <div class="rate">${stars(a.stars)}<b class="score">${(+a.score).toFixed(1)}</b><span class="by">nota del admin</span></div>
+          ${community(a)}
+        </div>
+      </div>
+      <div class="d-review">
+        <p class="kicker">Reseña del admin</p>
+        <p>${esc(a.text)}</p>
+      </div>
+      ${admin ? `
+      <div class="admbar">
+        <span>Herramientas de admin</span>
+        ${['day', 'week', 'month', 'hist'].map(l => `<button class="x${inList(l, a.id) ? ' in' : ''}" type="button" data-tog="${l}">${inList(l, a.id) ? '✓ ' : '+ '}${LISTNAME[l]}</button>`).join('')}
+        <button class="x" type="button" data-del="${a.id}">Eliminar reseña</button>
+      </div>` : ''}
+      <h4 class="c-title">Comentarios (${cs.length})</h4>
+      <form id="cForm" class="cform">
+        <label>Tu nombre<input id="cName" required maxlength="30" value="${esc(savedName)}"></label>
+        <fieldset class="pick" id="pick">
+          <legend>Tus estrellas (opcional)</legend>
+          ${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="cStars" value="${n}" aria-label="${n} estrella${n > 1 ? 's' : ''}"><span>${CFG.star}</span></label>`).join('')}
+          <button class="x clear" type="button" data-clearstars>Sin estrellas</button>
+        </fieldset>
+        <label>Comentario<textarea id="cText" required maxlength="500" rows="3" placeholder="¿Qué te pareció?"></textarea></label>
+        <div><button class="btn" type="submit">Publicar comentario</button></div>
+      </form>
+      <ul class="clist">
+        ${cs.map(c => `
+          <li>
+            <div class="c-top"><b>${esc(c.user)}</b>${c.stars ? stars(c.stars) : '<span class="nostar">sin estrellas</span>'}<time>${fmt(c.ts)}</time></div>
+            <p>${esc(c.text)}</p>${admin ? `<div class="c-adm">${c.stars ? `<button class="x" type="button" data-unstar="${c.id}">Quitar estrellas</button>` : ''}<button class="x" type="button" data-delc="${c.id}">Borrar comentario</button></div>` : ''}
+          </li>`).join('') || '<li class="empty">Nadie ha comentado todavía. Sé el primero.</li>'}
+      </ul>`;
+    }
+
+    function openDetail(id) {
+      cur = id; renderDetail();
+      $('#overlay').hidden = false;
+      document.body.classList.add('lock');
+      $('#sheet').scrollTop = 0;
+      $('#sheet').focus();
+    }
+
+    function closeDetail() {
+      cur = null;
+      $('#overlay').hidden = true;
+      document.body.classList.remove('lock');
+    }
+
+    function toast(m) {
+      const t = $('#toast');
+      t.textContent = m;
+      t.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.hidden = true, 2200);
+    }
+
+    function arm(b, m) {
+      if (b.classList.contains('armed')) return true;
+      b.classList.add('armed');
+      b.dataset.orig = b.textContent;
+      b.textContent = m;
+      setTimeout(() => { if (b.isConnected) { b.classList.remove('armed'); b.textContent = b.dataset.orig; } }, 3000);
+      return false;
+    }
+
+    // Delegación de Eventos
+    document.addEventListener('click', e => {
+      const t = e.target;
+      let b;
+
+      if (t.id === 'overlay' || t.closest('[data-close]')) return closeDetail();
+      if (t.closest('#roleBtn')) { admin = !admin; render(); return toast(admin ? 'Modo admin activado' : 'Viendo como visitante'); }
+      if ((b = t.closest('#resetBtn'))) { if (!arm(b, '¿Seguro? Toca otra vez')) return; S = JSON.parse(JSON.stringify(SEED)); closeDetail(); return commit('Demo restablecida'); }
+
+      if ((b = t.closest('[data-rm]'))) { const l = b.dataset.rm, id = b.dataset.id; if (l === 'day') S.day = null; else S.lists[l] = S.lists[l].filter(x => x !== id); return commit('Quitado de ' + LISTNAME[l]); }
+      if ((b = t.closest('[data-up]'))) { const L = S.lists[b.dataset.up], i = L.indexOf(b.dataset.id); if (i > 0) [L[i - 1], L[i]] = [L[i], L[i - 1]]; return commit(); }
+      if ((b = t.closest('[data-tog]'))) { const l = b.dataset.tog; if (l === 'day') S.day = S.day === cur ? null : cur; else { const L = S.lists[l]; S.lists[l] = L.includes(cur) ? L.filter(x => x !== cur) : [...L, cur]; } return commit(LISTNAME[l] + ' actualizado'); }
+
+      if ((b = t.closest('[data-del]'))) {
+        if (!arm(b, '¿Eliminar? Toca otra vez')) return;
+        const id = b.dataset.del;
+        S.anime = S.anime.filter(a => a.id !== id);
+        S.comments = S.comments.filter(c => c.aid !== id);
+        for (const k in S.lists) S.lists[k] = S.lists[k].filter(x => x !== id);
+        if (S.day === id) S.day = null;
+        closeDetail(); return commit('Reseña eliminada');
+      }
+
+      if ((b = t.closest('[data-delc]'))) { S.comments = S.comments.filter(c => c.id !== b.dataset.delc); return commit('Comentario borrado'); }
+      if ((b = t.closest('[data-unstar]'))) { const c = S.comments.find(c => c.id === b.dataset.unstar); if (c) c.stars = 0; return commit('Estrellas quitadas'); }
+
+      if (t.closest('[data-clearstars]')) { document.querySelectorAll('#pick input').forEach(i => i.checked = false); paintPick(); return; }
+      if ((b = t.closest('[data-open]')) && !t.closest('.adm')) { openDetail(b.dataset.open); }
+    });
+
+    function paintPick() {
+      const v = +(document.querySelector('#pick input:checked')?.value || 0);
+      document.querySelectorAll('#pick label').forEach((l, i) => l.classList.toggle('on', i < v));
+    }
+
+    document.addEventListener('change', e => { if (e.target.name === 'cStars') paintPick(); });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !$('#overlay').hidden) closeDetail();
+      if (e.key === 'Enter' && e.target.matches('[data-open]:not(button)')) openDetail(e.target.dataset.open);
+    });
+
+    document.addEventListener('submit', e => {
+      e.preventDefault();
+      if (e.target.id === 'cForm') {
+        const user = $('#cName').value.trim(), text = $('#cText').value.trim();
+        if (!user || !text) return;
+        try { localStorage.setItem(KEY + '-name', user); } catch (_) { }
+        S.comments.push({ id: 'c' + Date.now(), aid: cur, user, text, stars: +(document.querySelector('#pick input:checked')?.value || 0), ts: Date.now() });
+        return commit('Comentario publicado');
+      }
+
+      if (e.target.id === 'pubForm') {
+        const v = id => $(id).value.trim();
+        const a = { id: 'a' + Date.now(), title: v('#pTitle'), jp: v('#pJp'), year: +v('#pYear'), studio: v('#pStudio'), genre: v('#pGenre'), score: Math.min(10, Math.max(0, +v('#pScore'))), stars: +v('#pStars'), text: v('#pText'), hue: Math.floor(Math.random() * 360) };
+        S.anime.unshift(a);
+        if ($('#pHist').checked) { const p = Math.max(1, +v('#pHistPos')) - 1; S.lists.hist.splice(Math.min(p, S.lists.hist.length), 0, a.id); }
+        if ($('#pWeek').checked) S.lists.week.push(a.id);
+        if ($('#pMonth').checked) S.lists.month.push(a.id);
+        if ($('#pDay').checked) S.day = a.id;
+
+        e.target.reset();
+        return commit('Reseña publicada: ' + a.title);
+      }
+    });
+
+    // Inicializar
+    render();
+  </script>
 
 </body>
+
 </html>
